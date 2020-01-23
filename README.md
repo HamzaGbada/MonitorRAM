@@ -13,3 +13,5 @@ Finally , you need only to execute it :
 ```
 ./main.sh
 ```
+### Note:
+It work only on Linux
