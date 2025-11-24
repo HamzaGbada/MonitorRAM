@@ -1,11 +1,16 @@
 #!/usr/bin/gnuplot 
-#gnuplot
-set xrange [0:20]
-set yrange [0:400]
-system 
-plot [:] [0:system(" echo $(( $(grep MemTotal: /proc/meminfo | grep -Eo '[0-9]{1,10}') / 1024 )) ")] "file.dat" title "RAM evolution" linetype 7 linecolor 0 with linespoints
-pause 1
-reread
-set autoscale
-#pause -1
-#quit
+set terminal wxt size 800,600 enhanced
+set title "RAM Usage Evolution"
+set xlabel "Time (seconds)"
+set ylabel "RAM Used (MB)"
+set grid
+set autoscale x
+set autoscale y
+set style line 1 lc rgb 'blue' lt 1 lw 2 pt 7 ps 1
+while (1) {
+  if (system("test -s file.dat && echo 1 || echo 0") eq "1") {
+    plot "file.dat" using 1:2 title "RAM evolution" with linespoints ls 1
+  }
+  pause 1
+  reread
+}
