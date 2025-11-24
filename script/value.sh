@@ -27,25 +27,25 @@ echo "$(( MemUsed / 1024 ))"
 }
 b=1
 i=0
-x=(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
 while [ $b -eq 1 ]
 do
-	if [ $i -lt 20 ]
-	then 
-		x[$i]=$(memory)
-		echo "$x" >> file.dat
-		i=$((i + 1))
-	fi
-i=0
-y=$(wc -l file.dat)
-h=($y)
-k=${h[0]}
-#echo $k
+	mem_value=$(memory)
+	echo "$i $mem_value" >> file.dat
+	i=$((i + 1))
+	
+	# Count lines in file
+	y=$(wc -l file.dat 2>/dev/null)
+	h=($y)
+	k=${h[0]:-0}
+	
+	# Keep only last 20 lines (sliding window)
 	if [ $k -gt 20 ]
-		then
-		cat /dev/null > file.dat
+	then
+		tail -20 file.dat > file.dat.tmp
+		mv file.dat.tmp file.dat
 	fi
-#./graph.sh
+	
+	sleep 1
 done
 
 
